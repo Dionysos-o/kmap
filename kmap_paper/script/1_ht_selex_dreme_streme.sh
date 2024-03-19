@@ -1,20 +1,18 @@
 #!/bin/bash
 
-# 定义输入目录
 input_dir="./fasta_dem"
-# 定义日志文件
+
 log_file="$input_dir/process_times_dreme_streme.log"
 
-# 清空旧的日志文件
 > "$log_file"
 
-# 遍历文件夹中的所有.fasta文件
+
 for fasta_file in "$input_dir"/*.fasta; do
-    # 获取文件名，不包含路径
+
     filename=$(basename "$fasta_file" .fasta)
     echo "processing: $fasta_file" | tee -a "$log_file"
 
-    # 创建一个以文件名命名的工作目录
+
     work_dir="$input_dir/$filename"
     mkdir -p "$work_dir"
 
