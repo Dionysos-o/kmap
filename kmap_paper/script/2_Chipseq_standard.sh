@@ -1,35 +1,41 @@
 #!/bin/bash
 
-# ?~O~P示?~T??~H??~S?~E??| ??~\??~O?
+# Prompt for sample number
 SAMPLE=$1
 
-# SRA?~V~G件路?~D
-BAM_DIR="./bam_files/"
-PEAK_DIR="./peak_files_ref/${SAMPLE}"
-FASTA_DIR="./fasta_files_ref/${SAMPLE}_ref"
+# Directories
+BASE_DIR="./"
+SRA_DIR="${BASE_DIR}sra_files_single/"
+FASTQ_DIR="${BASE_DIR}fastq_files_single/${SAMPLE}/"
+SAM_DIR="${BASE_DIR}sam_files_single/${SAMPLE}/"
+BAM_DIR="${BASE_DIR}bam_files_single/${SAMPLE}/"
+PEAK_DIR="${BASE_DIR}peak_files_single/${SAMPLE}/"
+FASTA_DIR="${BASE_DIR}fasta_files_single/${SAMPLE}/"
 
-mkdir -p $SRA_FILE
-mkdir -p $FASTQ_DIR
-mkdir -p $SAM_DIR
-mkdir -p $BAM_DIR
-mkdir -p $PEAK_DIR
-mkdir -p $FASTA_DIR
+# Create directories
+mkdir -p $SRA_DIR $FASTQ_DIR $SAM_DIR $BAM_DIR $PEAK_DIR $FASTA_DIR
 
+# Download SRA data
+echo "Downloading SRA data for sample $SAMPLE..."
+prefetch -O $SRA_DIR $SAMPLE
 
+# Convert SRA to FASTQ
+echo "Converting SRA to FASTQ..."
+fasterq-dump --split-files -O $FASTQ_DIR $SRA_DIR$SAMPLE.sra
+
+# Reference genome
 HG19_REFERENCE="./hg19.fa"
 
+# Align FASTQ to hg19
+echo "Aligning FASTQ to hg19..."
+bowtie2 -p 20 -x $HG19_REFERENCE -1 ${FASTQ_DIR}${SAMPLE}_1.fastq -2 ${FASTQ_DIR}${SAMPLE}_2.fastq | samtools view -Sb - > ${BAM_DIR}${SAMPLE}.bam
 
-
-# ?~C?~T?peaks?~L?~N??~WnarrowPeak?~V~G件
+# Call peaks
 echo "Calling peaks..."
+macs2 callpeak -t ${BAM_DIR}${SAMPLE}.bam -f BAMPE -g hs -n ${SAMPLE} --outdir $PEAK_DIR
 
-macs2 callpeak -t $BAM_DIR/${SAMPLE}.bam -c $BAM_DIR/SRR15358917.bam -f BAMPE -g hs -n ${SAMPLE} --outdir $PEAK_DIR/
-
-# narrowPeak?~V~G件路?~D
-NARROWPEAK="peaks_peaks.narrowPeak"
-
-# 使?~T?bedtools?~N??~O~Vfasta?~O?~H~W
+# Convert narrowPeak to FASTA
 echo "Converting narrowPeak to FASTA..."
-bedtools getfasta -fi $HG19_REFERENCE -bed $PEAK_DIR/${SAMPLE}"_peaks.narrowPeak" -fo $FASTA_DIR/${SAMPLE}_ref.fasta
+bedtools getfasta -fi $HG19_REFERENCE -bed ${PEAK_DIR}${SAMPLE}_peaks.narrowPeak -fo ${FASTA_DIR}${SAMPLE}.fasta
 
-echo "Done!"
+echo "Pipeline for $SAMPLE completed successfully!"
