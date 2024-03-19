@@ -76,7 +76,7 @@ def main(filename1, filename2):
     Main function to process files and calculate consensus.
     """
     filepath1 = filename1 + "/meme.txt"
-    filepath2 = filename2 + "/top_chain_new_lc.txt"
+    filepath2 = filename2 + "/top_motif.txt"
     consensus1 = extract_meme_consensus_with_alignment(filepath1)
     consensus2 = extract_kmap_consensus(filepath2)
     result = []
