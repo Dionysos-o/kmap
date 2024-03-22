@@ -1,6 +1,6 @@
 # Kmer Manifold Approximation and Projection (KMAP)
 kmap is a package for visualizing kmers in 2D space. 
-![image](https://github.com/Dionysos-o/kmap/blob/main/kmap_paper/iteration_animation.gif)
+![image](https://github.com/Dionysos-o/kmap/blob/main/kmap_paper/iteration_animation_2.gif)
 ## Installation
 ```
 conda create --name=kmap_test python=3.11
