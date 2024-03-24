@@ -2,8 +2,8 @@
 kmap is a package for visualizing kmers in 2D space. 
 ![image](https://github.com/Dionysos-o/kmap/blob/main/kmap_paper/kmapshownew.gif)
 ## Quick start
-1，For installation of kmap, you can refer to :
-2, make sure you have installed the following package in your enviroment
+1, To install kmap, please refer to the documentation in section 2. 
+2, Please ensure that the necessary packages listed in the environment requirements are installed in your environment.
 requirements:
 ```bash
 numpy==1.16.4
@@ -12,13 +12,20 @@ matplotlib==3.1.0
 seaborn==0.9.0
 scikit-learn==0.21.2
 ```
+3,In the ChIP-seq section, you will need to install the following packages with their specified versions:
 
+SRA Tools, version 3.0.5
+Bowtie2, version 2.5.1
+MACS2, version 2.2.7.1
+SamTools, version 1.6
+BedTools, version 2.31.0
+MUSCLE, version 5
 ## KMAP experiment
 ### HT-selex anylysis
 Please ensure that the MEME suite has been installed in your environment by following the tutorial [here](https://meme-suite.org/meme/doc/install.html). We recommend using Docker for the installation.
 
 You can use script `0_ht_selex_downlaod.sh` to download the HT-SELEX data from European Nucleotide Archive (ENA) under the accession number ERP001824 [here](https://www.ebi.ac.uk/ena/browser/view/PRJEB3289)
-The file is fasta format and you can feed it to kmap directly without any preprocessing. 
+The file is fasta format and you can feed it to kmap and meme directly without any preprocessing. 
 
 ```bash
 sh 1_ht_selex_kmap.sh
@@ -43,24 +50,8 @@ sh 2_Chipseq_standard.sh SRR935526
 #### Analysis of H3K27ac CHip-seq in promoter and enhancer regions
 
 Get the annotation of the peak, you can download the annotation file from [here](https://www.bioconductor.org/packages/release/data/annotation/html/TxDb.Hsapiens.UCSC.hg19.knownGene.html)
-```bash
- txdb <- TxDb.Hsapiens.UCSC.hg19.knownGene
- anno_peak <- annotatePeak(peak, tssRegion=c(-2000,200), TxDb=txdb)
-```
-Divide the peak into promoter and enhancer(we define the promoter region as TSS:(-1kb, +2kb), the enhancer region is the rest))
-```bash
-anno_peak_df <- as.data.frame(anno_peak)
-promoter_peaks <- anno_peak_df[anno_peak_df$annotation %in% c("Promoter (<=1kb)", "Promoter (1-2kb)"), ]
-enhancer_peaks <- anno_peak_df[!anno_peak_df$annotation %in% c("Promoter (<=1kb)", "Promoter (1-2kb)"), ]
-```
-Export the peak to bed file 
-```bash
-promoter_gr <- GRanges(seqnames = promoter_peaks$seqnames,
-	                       ranges = IRanges(start = promoter_peaks$start, end = promoter_peaks$end),
-	                       strand = promoter_peaks$strand)
-export(promoter_gr, output_promoter_file)
-```
-or simply use the 
+
+simply use the following command to split the promoter and enhancer region
 ```bash
 sh 2_spilt_promoter_enhancer.sh
 ```
