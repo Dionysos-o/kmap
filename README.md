@@ -2,24 +2,17 @@
 kmap is a package for visualizing kmers in 2D space. 
 ![image](https://github.com/Dionysos-o/kmap/blob/main/kmap_paper/kmapshownew.gif)
 ## Quick start
-1, To install kmap, please refer to the documentation in section 2. 
-2, Please ensure that the necessary packages listed in the environment requirements are installed in your environment.
-requirements:
-```bash
-numpy==1.16.4
-pandas==0.24.2
-matplotlib==3.1.0
-seaborn==0.9.0
-scikit-learn==0.21.2
-```
-3,In the ChIP-seq section, you will need to install the following packages with their specified versions:
+1, To install kmap, please refer to [here](https://github.com/chengl7-lab/kmap). 
 
+2, In the ChIP-seq section, you will also need to install the following packages with their specified versions:
+```text
 SRA Tools, version 3.0.5
 Bowtie2, version 2.5.1
 MACS2, version 2.2.7.1
 SamTools, version 1.6
 BedTools, version 2.31.0
 MUSCLE, version 5
+```
 ## KMAP experiment
 ### HT-selex anylysis
 Please ensure that the MEME suite has been installed in your environment by following the tutorial [here](https://meme-suite.org/meme/doc/install.html). We recommend using Docker for the installation.
