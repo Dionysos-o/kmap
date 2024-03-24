@@ -34,7 +34,7 @@ sh 1_ht_selex_dreme_streme.sh
 ```
 
 ### EWS Chipseq analysis
-In Ewing Sarcoma data analysis, we use the source data from [GSE47753](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE47753).
+In Ewing Sarcoma data analysis, we use the source data from [GSE181554](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE181554).
 
 You can follow the steps below to conduct thh Chip-seq pipline and get the enrichment fasta file for KMAP。Here we use SRR935526 as an example:
 ```bash
